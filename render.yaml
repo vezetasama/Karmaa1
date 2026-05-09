@@ -10,11 +10,12 @@ services:
       - key: NODE_ENV
         value: production
 
-  - type: static_site
+  - type: web
     name: karma-frontend
-    env: static
+    env: node
     region: oregon
     plan: free
+    staticSite: true
     buildCommand: cd client && npm install && npm run build
     publishPath: client/dist
     envVars:
