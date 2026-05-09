@@ -15,7 +15,7 @@ const server = http.createServer(app);
 initSocket(server);
 
 // Middleware
-app.use(cors({ origin: ['http://localhost:5173', 'http://192.168.1.69:5173'], credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '8mb' }));
 
 // Routes
