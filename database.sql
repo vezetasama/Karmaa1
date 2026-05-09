@@ -1,0 +1,2 @@
+-- SQL schema/data script for Karma project
+-- Add CREATE TABLE, INSERT, and other statements below.
