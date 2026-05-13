@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
+const path = require('path');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const { initSocket } = require('./config/socket');
@@ -30,6 +31,17 @@ app.use('/api/notifications', require('./routes/notifications'));
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Karma API is running' });
 });
+
+// Serve React frontend in production
+if (process.env.NODE_ENV === 'production') {
+  const clientDist = path.join(__dirname, '..', 'client', 'dist');
+  app.use(express.static(clientDist));
+
+  // All non-API routes serve the React app (SPA routing)
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
 
 // Global error handler
 app.use((err, req, res, next) => {
