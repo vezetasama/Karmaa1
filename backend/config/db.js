@@ -24,6 +24,11 @@ const connectDB = async () => {
       return true;
     } catch (error) {
       console.error(`❌ MongoDB Connection Attempt ${i}/${retries} failed: ${error.message}`);
+      if (error.message.includes('querySrv ECONNREFUSED') && uri.startsWith('mongodb+srv')) {
+        console.error(
+          '   Hint: On some Windows setups, mongodb+srv DNS fails. Use the standard mongodb://… connection string from Atlas (Connect → Drivers), or allow 0.0.0.0/0 in Atlas Network Access for cloud hosts like Render.'
+        );
+      }
       if (i === retries) {
         console.error('❌ All MongoDB connection attempts failed.');
         return false;

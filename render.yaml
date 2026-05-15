@@ -1,17 +1,17 @@
 services:
   - type: web
-    name: karma-website1
+    name: karmaa
     env: node
     region: oregon
     plan: free
-    buildCommand: cd frontend && npm ci --include=dev && npm run build && cd ../backend && npm ci
+    buildCommand: cd frontend && npm ci --include=dev && VITE_API_BASE_URL=https://karmaa-e1pk.onrender.com/api VITE_SOCKET_URL=https://karmaa-e1pk.onrender.com VITE_GOOGLE_CLIENT_ID=895976573042-vkgtb5a2m16ca4qtobhg6p6dfj655p4d.apps.googleusercontent.com npm run build && cd ../backend && npm ci
     startCommand: cd backend && NODE_ENV=production npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
       - key: CLIENT_URL
-        value: https://karma-website1.onrender.com
+        value: https://karmaa-e1pk.onrender.com
       - key: SMTP_HOST
         sync: false
       - key: SMTP_PORT
@@ -29,8 +29,8 @@ services:
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: VITE_API_BASE_URL
-        value: https://karma-website1.onrender.com/api
+        value: https://karmaa-e1pk.onrender.com/api
       - key: VITE_SOCKET_URL
-        value: https://karma-website1.onrender.com
+        value: https://karmaa-e1pk.onrender.com
       - key: VITE_GOOGLE_CLIENT_ID
         value: 895976573042-vkgtb5a2m16ca4qtobhg6p6dfj655p4d.apps.googleusercontent.com
