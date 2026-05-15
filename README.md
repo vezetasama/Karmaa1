@@ -34,59 +34,89 @@ mongod
 
 ```bash
 # Backend
-cd server
+cd backend
 npm install
 
 # Frontend
-cd ../client
+cd ../frontend
+npm install
+
+# Admin panel (optional separate dev server)
+cd ../admin
 npm install
 ```
 
 ### 3. Seed the Database
 
 ```bash
-cd server
+cd backend
 npm run seed
 ```
 
-This creates:
-- 3 products (Free Fire, PUBG Mobile, Mobile Legends)
-- Admin user: `admin@karma.com` / `admin123`
-- Test user: `user@karma.com` / `user123`
+This creates products and an admin user. For production, run `npm run prepare-host` instead (strong password + clean orders).
 
 ### 4. Start Development Servers
 
 ```bash
 # Terminal 1 — Backend (port 5000)
-cd server
+cd backend
 npm run dev
 
 # Terminal 2 — Frontend (port 5173)
-cd client
+cd frontend
 npm run dev
 ```
 
 Visit: **http://localhost:5173**
 
+## 🌐 Deploy on Render (free plan)
+
+This repo includes `render.yaml` for a single **free** web service that builds the React app and serves it from Express.
+
+### Before first deploy
+
+1. Create a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster and copy the connection string.
+2. In Render → your service → **Environment**, set:
+   - `MONGODB_URI` — Atlas connection string
+   - `JWT_SECRET` — long random string (32+ characters)
+   - `GOOGLE_CLIENT_ID` — same as `VITE_GOOGLE_CLIENT_ID`
+   - `SMTP_*` and `EMAIL_FROM` — for verification / password emails
+3. On your machine (with MongoDB running), prepare a clean database and admin login:
+
+```bash
+cd backend
+npm run prepare-host
+```
+
+This clears test orders, sets a strong admin account, and writes credentials to `backend/ADMIN_CREDENTIALS.local.txt` (gitignored).
+
+You can also clear orders from **Admin → Orders → Clear all data** before going live.
+
+### Admin login (after prepare-host)
+
+Default email: `admin@karmastore.np`  
+Password: see `backend/ADMIN_CREDENTIALS.local.txt` or set `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env` before running `prepare-host`.
+
+### Google Sign-In on production
+
+In Google Cloud Console → OAuth client → **Authorized JavaScript origins**, add:
+
+- `https://karma-website1.onrender.com` (or your Render URL)
+
 ## 📁 Project Structure
 
 ```
-Karma/
-├── client/          # React Frontend (Vite)
-│   ├── src/
-│   │   ├── components/   # Navbar, Footer, ProductCard, etc.
-│   │   ├── pages/        # Home, Products, Cart, Checkout, etc.
-│   │   ├── store/        # Zustand stores (auth, cart)
-│   │   └── services/     # Axios API client
-│   └── ...
-├── server/          # Express Backend
-│   ├── config/      # Database connection
-│   ├── controllers/ # Route handlers
-│   ├── middleware/   # JWT auth
-│   ├── models/      # Mongoose schemas
-│   ├── routes/      # API routes
-│   ├── services/    # Delivery & payment
-│   └── seed.js      # Database seeder
+FOOD-DEL/            # Karma project (open this folder in the editor)
+├── frontend/        # Customer React app (Vite)
+├── admin/           # Admin panel app (same stack; deploy separately if needed)
+├── backend/         # Express API + MongoDB
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── services/
+│   └── seed.js
 └── README.md
 ```
 
