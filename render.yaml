@@ -1,27 +1,36 @@
 services:
   - type: web
-    name: karma-backend
+    name: karma-website1
     env: node
     region: oregon
     plan: free
-    buildCommand: cd server && npm install
-    startCommand: cd server && npm start
+    buildCommand: cd frontend && npm ci --include=dev && npm run build && cd ../backend && npm ci
+    startCommand: cd backend && NODE_ENV=production npm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
-
-  - type: web
-    name: karma-frontend
-    env: node
-    region: oregon
-    plan: free
-    staticSite: true
-    buildCommand: cd client && npm install && npm run build
-    publishPath: client/dist
-    envVars:
+      - key: CLIENT_URL
+        value: https://karma-website1.onrender.com
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
       - key: VITE_API_BASE_URL
-        value: https://karma-backend.onrender.com/api
+        value: https://karma-website1.onrender.com/api
       - key: VITE_SOCKET_URL
-        value: https://karma-backend.onrender.com
+        value: https://karma-website1.onrender.com
       - key: VITE_GOOGLE_CLIENT_ID
-        value: ""
+        value: 895976573042-vkgtb5a2m16ca4qtobhg6p6dfj655p4d.apps.googleusercontent.com
