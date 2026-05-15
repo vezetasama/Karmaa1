@@ -18,6 +18,7 @@ A Kunyo-clone web platform for purchasing game top-ups and gift cards with insta
 - **Node.js** (v18+): https://nodejs.org/
 - **MongoDB** (v6+): https://www.mongodb.com/try/download/community
 - **Git**: For version control
+- **VS Code**: Recommended editor for this project
 
 ## 🚀 Quick Start
 
