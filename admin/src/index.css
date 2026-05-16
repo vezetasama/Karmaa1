@@ -281,6 +281,10 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 
 /* ==================== ANIMATIONS ==================== */

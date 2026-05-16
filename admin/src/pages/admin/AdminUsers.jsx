@@ -51,7 +51,7 @@ export default function AdminUsers() {
         </button>
       </div>
 
-      <div className="rounded-2xl border border-white/[0.06] bg-dark-800/40 backdrop-blur-sm overflow-hidden">
+      <div className="hidden md:block rounded-2xl border border-white/[0.06] bg-dark-800/40 backdrop-blur-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -104,6 +104,51 @@ export default function AdminUsers() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile Cards View */}
+      <div className="md:hidden space-y-4">
+        {users.map((u) => (
+          <div key={u._id} className="rounded-xl border border-white/[0.06] bg-dark-800/40 backdrop-blur-sm p-4 relative flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-purple to-neon-cyan flex items-center justify-center shadow-glow-sm shrink-0">
+                  <span className="text-sm font-bold text-white">{u.name?.charAt(0).toUpperCase()}</span>
+                </div>
+                <div>
+                  <p className="font-medium text-white">{u.name}</p>
+                  <p className="text-xs text-gray-400">{u.email}</p>
+                </div>
+              </div>
+              <div>
+                {u.role === 'admin' ? (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-neon-purple/10 text-neon-purple-light border border-neon-purple/30">
+                    <Shield className="w-3 h-3" /> Admin
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-dark-700/50 text-gray-500 border border-white/5">
+                    <User className="w-3 h-3" /> User
+                  </span>
+                )}
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between mt-2 pt-3 border-t border-white/[0.04]">
+              <div>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wide">Joined</p>
+                <p className="text-xs text-gray-300 mt-0.5">{new Date(u.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => openCredentialModal(u._id)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-neon-cyan border border-neon-cyan/40 bg-neon-cyan/10 hover:bg-neon-cyan/20 hover:border-neon-cyan/60 transition-all duration-300"
+              >
+                <Eye className="w-3.5 h-3.5" />
+                View Credentials
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
 
       {(credentialLoading || credentialError || viewingUser) && (

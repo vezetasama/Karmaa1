@@ -102,7 +102,7 @@ export default function AdminProducts() {
 
             <div className="space-y-4">
               {/* Basic Fields */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Name *</label>
                   <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input-field text-sm" placeholder="Free Fire" />
@@ -112,7 +112,7 @@ export default function AdminProducts() {
                   <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="input-field text-sm" placeholder="free-fire (auto-generated)" />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Category *</label>
                   <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="input-field text-sm">
@@ -152,13 +152,18 @@ export default function AdminProducts() {
                   <button onClick={addPkg} className="text-xs text-neon-purple hover:text-neon-purple-light flex items-center gap-1"><Plus className="w-3 h-3" /> Add</button>
                 </div>
                 {form.packages.map((pkg, i) => (
-                  <div key={i} className="grid grid-cols-5 gap-2 mb-2">
-                    <input value={pkg.label} onChange={(e) => updatePkg(i, 'label', e.target.value)} className="input-field text-xs col-span-2" placeholder="Label" />
-                    <input type="number" value={pkg.amount} onChange={(e) => updatePkg(i, 'amount', e.target.value)} className="input-field text-xs" placeholder="Amount" />
-                    <input type="number" value={pkg.price} onChange={(e) => updatePkg(i, 'price', e.target.value)} className="input-field text-xs" placeholder="Price" />
-                    <div className="flex items-center gap-1">
-                      <input type="number" value={pkg.originalPrice || ''} onChange={(e) => updatePkg(i, 'originalPrice', e.target.value)} className="input-field text-xs" placeholder="OG Price" />
-                      {form.packages.length > 1 && <button onClick={() => removePkg(i)} className="text-red-400 shrink-0"><X className="w-3.5 h-3.5" /></button>}
+                  <div key={i} className="flex flex-col md:grid md:grid-cols-5 gap-2 mb-3 md:mb-2 bg-dark-900/50 p-3 md:p-0 md:bg-transparent rounded-lg md:rounded-none border border-white/[0.04] md:border-0 relative">
+                    {form.packages.length > 1 && (
+                      <button onClick={() => removePkg(i)} className="absolute top-2 right-2 md:static md:hidden text-red-400 shrink-0"><X className="w-4 h-4" /></button>
+                    )}
+                    <input value={pkg.label} onChange={(e) => updatePkg(i, 'label', e.target.value)} className="input-field text-xs md:col-span-2 pr-8 md:pr-3" placeholder="Label" />
+                    <div className="grid grid-cols-3 md:contents gap-2">
+                      <input type="number" value={pkg.amount} onChange={(e) => updatePkg(i, 'amount', e.target.value)} className="input-field text-xs" placeholder="Amount" />
+                      <input type="number" value={pkg.price} onChange={(e) => updatePkg(i, 'price', e.target.value)} className="input-field text-xs" placeholder="Price" />
+                      <div className="flex items-center gap-1">
+                        <input type="number" value={pkg.originalPrice || ''} onChange={(e) => updatePkg(i, 'originalPrice', e.target.value)} className="input-field text-xs w-full" placeholder="OG Price" />
+                        {form.packages.length > 1 && <button onClick={() => removePkg(i)} className="hidden md:block text-red-400 shrink-0 ml-1"><X className="w-3.5 h-3.5" /></button>}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -171,16 +176,19 @@ export default function AdminProducts() {
                   <button onClick={addField} className="text-xs text-neon-purple hover:text-neon-purple-light flex items-center gap-1"><Plus className="w-3 h-3" /> Add</button>
                 </div>
                 {form.inputFields.map((f, i) => (
-                  <div key={i} className="grid grid-cols-4 gap-2 mb-2">
-                    <input value={f.name} onChange={(e) => updateField(i, 'name', e.target.value)} className="input-field text-xs" placeholder="name key" />
+                  <div key={i} className="flex flex-col md:grid md:grid-cols-4 gap-2 mb-3 md:mb-2 bg-dark-900/50 p-3 md:p-0 md:bg-transparent rounded-lg md:rounded-none border border-white/[0.04] md:border-0 relative">
+                     {form.inputFields.length > 1 && (
+                      <button onClick={() => removeField(i)} className="absolute top-2 right-2 md:static md:hidden text-red-400 shrink-0"><X className="w-4 h-4" /></button>
+                    )}
+                    <input value={f.name} onChange={(e) => updateField(i, 'name', e.target.value)} className="input-field text-xs pr-8 md:pr-3" placeholder="name key" />
                     <input value={f.label} onChange={(e) => updateField(i, 'label', e.target.value)} className="input-field text-xs" placeholder="Label" />
                     <input value={f.placeholder} onChange={(e) => updateField(i, 'placeholder', e.target.value)} className="input-field text-xs" placeholder="Placeholder" />
                     <div className="flex items-center gap-1">
-                      <select value={String(f.required)} onChange={(e) => updateField(i, 'required', e.target.value)} className="input-field text-xs">
+                      <select value={String(f.required)} onChange={(e) => updateField(i, 'required', e.target.value)} className="input-field text-xs w-full">
                         <option value="true">Required</option>
                         <option value="false">Optional</option>
                       </select>
-                      {form.inputFields.length > 1 && <button onClick={() => removeField(i)} className="text-red-400 shrink-0"><X className="w-3.5 h-3.5" /></button>}
+                      {form.inputFields.length > 1 && <button onClick={() => removeField(i)} className="hidden md:block text-red-400 shrink-0 ml-1"><X className="w-3.5 h-3.5" /></button>}
                     </div>
                   </div>
                 ))}

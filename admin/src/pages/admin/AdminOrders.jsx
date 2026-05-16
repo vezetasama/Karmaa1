@@ -154,8 +154,8 @@ export default function AdminOrders() {
         </div>
       ) : (
         <>
-          {/* Orders Table */}
-          <div className="rounded-2xl border border-white/[0.06] bg-dark-800/40 backdrop-blur-sm overflow-hidden">
+          {/* Desktop Table View */}
+          <div className="hidden md:block rounded-2xl border border-white/[0.06] bg-dark-800/40 backdrop-blur-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -203,23 +203,25 @@ export default function AdminOrders() {
                         </td>
                         <td className="py-3 px-4 text-gray-600 text-xs">{new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
                         <td className="py-3 px-4">
-                          <select
-                            value={o.status}
-                            onChange={(e) => handleStatusChange(o._id, e.target.value)}
-                            disabled={updating === o._id}
-                            className="bg-dark-900/60 border border-white/[0.06] rounded-lg px-2 py-1 text-xs text-white outline-none focus:border-neon-purple/40 transition-colors"
-                          >
-                            {['pending', 'processing', 'delivered', 'failed', 'cancelled', 'refunded'].map((s) => (
-                              <option key={s} value={s}>{s}</option>
-                            ))}
-                          </select>
-                          <button
-                            onClick={() => setSelectedOrder(o)}
-                            className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-neon-cyan/30 bg-neon-cyan/10 px-2.5 py-1 text-xs font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-all"
-                          >
-                            <Eye className="w-3.5 h-3.5" />
-                            View
-                          </button>
+                          <div className="flex flex-col gap-2">
+                            <select
+                              value={o.status}
+                              onChange={(e) => handleStatusChange(o._id, e.target.value)}
+                              disabled={updating === o._id}
+                              className="bg-dark-900/60 border border-white/[0.06] rounded-lg px-2 py-1 text-xs text-white outline-none focus:border-neon-purple/40 transition-colors"
+                            >
+                              {['pending', 'processing', 'delivered', 'failed', 'cancelled', 'refunded'].map((s) => (
+                                <option key={s} value={s}>{s}</option>
+                              ))}
+                            </select>
+                            <button
+                              onClick={() => setSelectedOrder(o)}
+                              className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-neon-cyan/30 bg-neon-cyan/10 px-2.5 py-1 text-xs font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-all"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                              View
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -227,6 +229,74 @@ export default function AdminOrders() {
                 </tbody>
               </table>
             </div>
+          </div>
+
+          {/* Mobile Cards View */}
+          <div className="md:hidden space-y-4">
+            {orders.map((o) => {
+              const sc = statusColors[o.status] || statusColors.pending;
+              return (
+                <div key={o._id} className="rounded-xl border border-white/[0.06] bg-dark-800/40 backdrop-blur-sm p-4 relative overflow-hidden">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <span className="text-xs font-bold text-neon-cyan bg-neon-cyan/10 px-2 py-1 rounded-md border border-neon-cyan/20">{formatOrderId(o)}</span>
+                      <p className="text-[10px] text-gray-500 mt-2">{new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${sc.bg} ${sc.text} border ${sc.border}`}>
+                      {o.status === 'delivered' && <CheckCircle className="w-3 h-3" />}
+                      {o.status === 'pending' && <Clock className="w-3 h-3" />}
+                      {o.status === 'processing' && <Loader2 className="w-3 h-3 animate-spin" />}
+                      {o.status === 'failed' && <XCircle className="w-3 h-3" />}
+                      {o.status}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-2 text-sm mb-4 bg-dark-900/50 p-3 rounded-lg border border-white/[0.04]">
+                    <div>
+                      <p className="text-[10px] text-gray-500 uppercase tracking-wide">Customer</p>
+                      <p className="font-medium text-white text-xs mt-0.5 truncate">{o.user?.name || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-500 uppercase tracking-wide">Product</p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <div className="w-4 h-4 rounded flex items-center justify-center text-[8px] font-bold text-white shrink-0" style={{ background: o.product?.bannerColor || '#7C3AED' }}>
+                          {o.product?.name?.charAt(0)}
+                        </div>
+                        <span className="text-white text-xs truncate">{o.product?.name}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-500 uppercase tracking-wide">Package</p>
+                      <p className="text-neon-cyan text-xs mt-0.5 truncate">{o.package?.label}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-500 uppercase tracking-wide">Amount</p>
+                      <p className="font-bold text-white text-xs mt-0.5">Rs. {o.totalPrice?.toLocaleString()}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={o.status}
+                      onChange={(e) => handleStatusChange(o._id, e.target.value)}
+                      disabled={updating === o._id}
+                      className="flex-1 bg-dark-900/60 border border-white/[0.08] rounded-lg px-2.5 py-2 text-xs text-white outline-none focus:border-neon-purple/40 transition-colors"
+                    >
+                      {['pending', 'processing', 'delivered', 'failed', 'cancelled', 'refunded'].map((s) => (
+                        <option key={s} value={s} className="uppercase">{s}</option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={() => setSelectedOrder(o)}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-neon-cyan/30 bg-neon-cyan/10 px-4 py-2 text-xs font-medium text-neon-cyan hover:bg-neon-cyan/20 transition-all shrink-0"
+                    >
+                      <Eye className="w-4 h-4" />
+                      View
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* Pagination */}
