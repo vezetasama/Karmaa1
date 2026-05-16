@@ -45,123 +45,46 @@ exports.register = async (req, res) => {
         // Update the existing unverified user's info
         existingUser.name = name;
         existingUser.password = password;
+        existingUser.isVerified = true; // Temporarily auto-verify
         await existingUser.save();
 
-        // Generate and send new OTP
-        const otp = generateOTP();
-        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-
-        // Delete old verification OTPs for this user
-        await EmailVerificationOTP.deleteMany({ user: existingUser._id });
-
-        // Store hashed OTP
-        await EmailVerificationOTP.create({
-          user: existingUser._id,
-          email: existingUser.email,
-          otpHash: hashOTP(otp),
-          expiresAt: otpExpiry,
-        });
-
-        // Send verification email
-        let emailSent = false;
-        const isDev = process.env.NODE_ENV === 'development';
-        try {
-          const html = generateVerificationEmailHTML(otp, name);
-          const text = generateVerificationEmailText(otp, name);
-          await sendEmail({
-            to: existingUser.email,
-            subject: 'Verify Your Account - Karma',
-            text,
-            html,
-          });
-          emailSent = true;
-        } catch (emailError) {
-          console.error('Verification email send failed:', emailError.message);
-          if (!isDev) {
-            return res.status(500).json({
-              success: false,
-              message: 'Unable to send verification email. Please try again later.',
-            });
-          }
-          console.log('⚠️  Dev mode: Email failed, returning OTP in response');
-        }
-
-        if (isDev) console.log('Verification OTP for:', existingUser.email, 'OTP:', otp);
-
-        const responseData = {
+        const token = existingUser.getSignedToken();
+        return res.status(200).json({
           success: true,
-          requiresVerification: true,
-          email: existingUser.email,
-          message: emailSent
-            ? 'Verification code has been sent to your email.'
-            : 'Verification code generated (email delivery unavailable in dev mode).',
-        };
-
-        if (isDev && !emailSent) {
-          responseData.devOTP = otp;
-        }
-
-        return res.status(200).json(responseData);
+          requiresVerification: false,
+          data: {
+            id: existingUser._id,
+            name: existingUser.name,
+            email: existingUser.email,
+            role: existingUser.role,
+            profileImage: existingUser.profileImage,
+            token,
+          },
+          message: 'Registration successful',
+        });
       }
 
       return res.status(400).json({ success: false, message: 'Email already registered' });
     }
 
-    // Create new unverified user
-    const user = await User.create({ name, email, password, authProvider: 'local', isVerified: false });
+    // Create new user and temporarily auto-verify
+    const user = await User.create({ name, email, password, authProvider: 'local', isVerified: true });
 
-    // Generate OTP
-    const otp = generateOTP();
-    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const token = user.getSignedToken();
 
-    // Store hashed OTP
-    await EmailVerificationOTP.create({
-      user: user._id,
-      email: user.email,
-      otpHash: hashOTP(otp),
-      expiresAt: otpExpiry,
-    });
-
-    // Send verification email
-    let emailSent = false;
-    const isDev = process.env.NODE_ENV === 'development';
-    try {
-      const html = generateVerificationEmailHTML(otp, name);
-      const text = generateVerificationEmailText(otp, name);
-      await sendEmail({
-        to: user.email,
-        subject: 'Verify Your Account - Karma',
-        text,
-        html,
-      });
-      emailSent = true;
-    } catch (emailError) {
-      console.error('Verification email send failed:', emailError.message);
-      if (!isDev) {
-        return res.status(500).json({
-          success: false,
-          message: 'Unable to send verification email. Please try again later.',
-        });
-      }
-      console.log('⚠️  Dev mode: Email failed, returning OTP in response');
-    }
-
-    if (isDev) console.log('Verification OTP for:', user.email, 'OTP:', otp);
-
-    const responseData = {
+    res.status(201).json({
       success: true,
-      requiresVerification: true,
-      email: user.email,
-      message: emailSent
-        ? 'Verification code has been sent to your email.'
-        : 'Verification code generated (email delivery unavailable in dev mode).',
-    };
-
-    if (isDev && !emailSent) {
-      responseData.devOTP = otp;
-    }
-
-    res.status(201).json(responseData);
+      requiresVerification: false,
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profileImage: user.profileImage,
+        token,
+      },
+      message: 'Registration successful',
+    });
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ success: false, message: error.message });
@@ -393,12 +316,9 @@ exports.login = async (req, res) => {
     }
 
     if (!user.isVerified && user.role !== 'admin') {
-      return res.status(403).json({
-        success: false,
-        message: 'Please verify your email before signing in.',
-        requiresVerification: true,
-        email: user.email,
-      });
+      // TEMPORARILY AUTO-VERIFY users on login if they aren't verified yet
+      user.isVerified = true;
+      await user.save({ validateBeforeSave: false });
     }
 
     if (!process.env.JWT_SECRET) {

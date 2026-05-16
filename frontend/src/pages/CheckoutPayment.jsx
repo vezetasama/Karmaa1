@@ -106,7 +106,15 @@ export default function CheckoutPayment() {
           throw new Error(`Cannot process item: ${item.product?.name || 'Unknown product'}`);
         }
 
-        const productRes = await getProduct(productIdOrSlug);
+        let productRes;
+        try {
+          productRes = await getProduct(productIdOrSlug);
+        } catch (err) {
+          if (err.response?.status === 404) {
+            throw new Error(`Product "${item.product?.name || 'Unknown'}" is no longer available in the store. Please clear your cart and add products again.`);
+          }
+          throw err;
+        }
         const realProduct = productRes.data.data;
         const { index: packageIndex, pkg: matchedPackage } = resolvePackage(
           realProduct.packages,
