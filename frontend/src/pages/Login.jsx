@@ -125,7 +125,7 @@ export default function Login() {
               {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <><LogIn className="w-4 h-4" /> Sign In</>}
             </button>
           </form>
-          {GOOGLE_CLIENT_ID && (
+          {false && GOOGLE_CLIENT_ID && (
             <>
               <div className="flex items-center gap-3 my-6">
                 <div className="flex-1 h-px bg-white/[0.08]" />
