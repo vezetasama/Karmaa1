@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A1628"/>
+      <stop offset="50%" stop-color="#0D3B66"/>
+      <stop offset="100%" stop-color="#1E90FF"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E90FF"/>
+      <stop offset="100%" stop-color="#00BFFF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1E90FF" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#1E90FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="300" height="400" fill="url(#bgGrad)"/>
+
+  <!-- Glow effect behind logo -->
+  <ellipse cx="150" cy="160" rx="120" ry="100" fill="url(#glow)"/>
+
+  <!-- Decorative hexagons -->
+  <g opacity="0.08" fill="#fff">
+    <polygon points="50,50 65,42 80,50 80,66 65,74 50,66"/>
+    <polygon points="240,80 255,72 270,80 270,96 255,104 240,96"/>
+    <polygon points="30,300 45,292 60,300 60,316 45,324 30,316"/>
+    <polygon points="260,320 275,312 290,320 290,336 275,344 260,336"/>
+  </g>
+
+  <!-- Accent lines -->
+  <line x1="40" y1="380" x2="260" y2="380" stroke="url(#accentGrad)" stroke-width="2" opacity="0.6"/>
+
+  <!-- Stylized M Logo -->
+  <g transform="translate(150, 155)" filter="url(#shadow)">
+    <path d="M-50,-45 L-50,45 L-25,45 L-25,-10 L0,25 L25,-10 L25,45 L50,45 L50,-45 L25,-45 L0,-5 L-25,-45 Z"
+          fill="url(#accentGrad)"/>
+    <path d="M-50,-45 L-25,-45 L0,-5 L25,-45 L50,-45 L50,-35 L25,-35 L0,5 L-25,-35 L-50,-35 Z"
+          fill="#fff" opacity="0.3"/>
+  </g>
+
+  <!-- Diamond icon -->
+  <g transform="translate(150, 245)">
+    <polygon points="0,-12 14,0 0,12 -14,0" fill="#1E90FF" opacity="0.8"/>
+    <polygon points="0,-8 10,0 0,8 -10,0" fill="#00BFFF" opacity="0.9"/>
+  </g>
+
+  <!-- Title -->
+  <text x="150" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="#fff" letter-spacing="2">MOBILE</text>
+  <text x="150" y="318" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="#fff" letter-spacing="2">LEGENDS</text>
+  <text x="150" y="342" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#87CEEB" letter-spacing="4">BANG BANG</text>
+
+  <!-- Karma branding -->
+  <text x="150" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#fff" opacity="0.5" letter-spacing="1">KARMA</text>
+</svg>

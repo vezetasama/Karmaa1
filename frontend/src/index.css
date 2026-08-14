@@ -1,0 +1,414 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==================== BASE STYLES ==================== */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+    background-color: #0B0F1A;
+    color: #e2e8f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Premium Scrollbar ── */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0B0F1A;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #7C3AED 0%, #22D3EE 100%);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #a78bfa 0%, #67e8f9 100%);
+  }
+
+  ::selection {
+    background: rgba(124, 58, 237, 0.5);
+    color: #fff;
+  }
+}
+
+/* ==================== COMPONENT STYLES ==================== */
+@layer components {
+  /* ── Glassmorphism Card ── */
+  .glass-card {
+    @apply backdrop-blur-xl rounded-2xl;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(124, 58, 237, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300;
+  }
+
+  .glass-card-hover:hover {
+    border-color: rgba(124, 58, 237, 0.25);
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba(124, 58, 237, 0.12),
+      inset 0 1px 0 rgba(124, 58, 237, 0.12);
+  }
+
+  /* ── Primary Button ── */
+  .btn-primary {
+    @apply px-6 py-3 text-white font-semibold rounded-full
+           transition-all duration-300 active:scale-95
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    background: linear-gradient(135deg, #7C3AED, #6D28D9);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.35), 0 0 60px rgba(124, 58, 237, 0.08);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.5), 0 0 80px rgba(124, 58, 237, 0.2);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 text-white font-semibold rounded-full
+           transition-all duration-300 active:scale-95;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(124, 58, 237, 0.15);
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.12);
+    background: rgba(15, 23, 42, 0.95);
+  }
+
+  .btn-cyan {
+    @apply px-6 py-3 font-semibold rounded-full
+           transition-all duration-300 active:scale-95;
+    background: linear-gradient(135deg, #22D3EE, #06b6d4);
+    color: #0B0F1A;
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.35), 0 0 60px rgba(34, 211, 238, 0.08);
+  }
+
+  .btn-cyan:hover {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.5), 0 0 80px rgba(34, 211, 238, 0.2);
+  }
+
+  /* ── Accent Button (Red/Orange like kunyo) ── */
+  .btn-accent {
+    @apply px-6 py-3 text-white font-semibold rounded-full
+           transition-all duration-300 active:scale-95;
+    background: linear-gradient(135deg, #E11D48, #F43F5E);
+    box-shadow: 0 0 20px rgba(225, 29, 72, 0.3), 0 0 60px rgba(225, 29, 72, 0.08);
+  }
+
+  .btn-accent:hover:not(:disabled) {
+    background: linear-gradient(135deg, #F43F5E, #FB7185);
+    box-shadow: 0 0 30px rgba(225, 29, 72, 0.5), 0 0 80px rgba(225, 29, 72, 0.2);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  /* ── Neon Input ── */
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl text-white
+           placeholder-gray-500 outline-none transition-all duration-300;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(124, 58, 237, 0.1);
+  }
+
+  .input-field:focus {
+    border-color: rgba(124, 58, 237, 0.5);
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.15), 0 0 40px rgba(124, 58, 237, 0.05);
+  }
+
+  /* ── Section Titles ── */
+  .section-title {
+    @apply text-2xl md:text-3xl font-bold text-white;
+  }
+
+  .section-subtitle {
+    @apply text-gray-400 mt-2;
+  }
+
+  /* ── Neon Badges ── */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+  }
+
+  .badge-pending {
+    @apply badge;
+    background: rgba(250, 204, 21, 0.1);
+    color: #facc15;
+    border: 1px solid rgba(250, 204, 21, 0.3);
+    text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+  }
+
+  .badge-failed {
+    @apply badge;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  }
+
+  .badge-processing {
+    @apply badge;
+    background: rgba(34, 211, 238, 0.1);
+    color: #22D3EE;
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  }
+
+  /* ── Neon Divider ── */
+  .neon-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.4), rgba(34, 211, 238, 0.4), transparent);
+  }
+
+  /* ── Neon Border Animation ── */
+  .neon-border-animated {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .neon-border-animated::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(270deg, #7C3AED, #22D3EE, #E11D48, #7C3AED);
+    background-size: 400% 100%;
+    animation: border-dance 4s linear infinite;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* ==================== UTILITY STYLES ==================== */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #7C3AED, #22D3EE);
+  }
+
+  .text-gradient-pink {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #7C3AED, #E11D48);
+  }
+
+  .text-gradient-warm {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #E11D48, #F97316);
+  }
+
+  .text-neon-glow {
+    text-shadow: 0 0 10px rgba(124, 58, 237, 0.5), 0 0 30px rgba(124, 58, 237, 0.2);
+  }
+
+  .text-neon-glow-cyan {
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.5), 0 0 30px rgba(34, 211, 238, 0.2);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* ── Neon Underline Hover ── */
+  .neon-underline {
+    position: relative;
+  }
+  .neon-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #7C3AED, #22D3EE);
+    box-shadow: 0 0 8px rgba(124, 58, 237, 0.5);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+  .neon-underline:hover::after {
+    width: 100%;
+  }
+
+  /* ── Fade-in on scroll ── */
+  .fade-in-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .fade-in-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+/* ── Neon Focus Ring ── */
+*:focus-visible {
+  outline: 2px solid rgba(124, 58, 237, 0.5);
+  outline-offset: 2px;
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+}
+
+/* ── Ambient background mesh ── */
+.bg-mesh {
+  background:
+    radial-gradient(ellipse at 10% 20%, rgba(124, 58, 237, 0.08) 0px, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(34, 211, 238, 0.06) 0px, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(225, 29, 72, 0.03) 0px, transparent 60%);
+}
+
+/* ── Floating particles keyframes ── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-15px) translateX(5px); }
+  50% { transform: translateY(-5px) translateX(-5px); }
+  75% { transform: translateY(-20px) translateX(3px); }
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+/* ==================== ANIMATED NEON BACKGROUND ==================== */
+
+/* ── Base orb style — GPU-accelerated, large blurred circles ── */
+.neon-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0); /* force GPU layer */
+}
+
+/* ── Electric Blue orb ── */
+.neon-orb--blue {
+  width: 700px;
+  height: 700px;
+  top: -15%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.07) 0%, transparent 70%);
+  animation: orb-drift-1 20s ease-in-out infinite;
+}
+
+/* ── Neon Purple orb ── */
+.neon-orb--purple {
+  width: 800px;
+  height: 800px;
+  top: 20%;
+  right: -15%;
+  background: radial-gradient(circle, rgba(122, 0, 255, 0.06) 0%, transparent 70%);
+  animation: orb-drift-2 25s ease-in-out infinite;
+}
+
+/* ── Hot Pink orb ── */
+.neon-orb--pink {
+  width: 600px;
+  height: 600px;
+  bottom: -10%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(255, 0, 200, 0.05) 0%, transparent 70%);
+  animation: orb-drift-3 22s ease-in-out infinite;
+}
+
+/* ── Cyan accent orb ── */
+.neon-orb--cyan {
+  width: 500px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.04) 0%, transparent 70%);
+  animation: orb-drift-4 18s ease-in-out infinite;
+}
+
+/* ── Orb drift keyframes — slow, organic, looping paths ── */
+@keyframes orb-drift-1 {
+  0%   { transform: translate3d(0, 0, 0)       scale(1);    opacity: 0.7; }
+  25%  { transform: translate3d(80px, 60px, 0)  scale(1.1);  opacity: 1;   }
+  50%  { transform: translate3d(150px, 30px, 0) scale(0.95); opacity: 0.8; }
+  75%  { transform: translate3d(50px, -40px, 0) scale(1.05); opacity: 0.9; }
+  100% { transform: translate3d(0, 0, 0)       scale(1);    opacity: 0.7; }
+}
+
+@keyframes orb-drift-2 {
+  0%   { transform: translate3d(0, 0, 0)         scale(1);    opacity: 0.6; }
+  25%  { transform: translate3d(-100px, 50px, 0)  scale(1.08); opacity: 0.9; }
+  50%  { transform: translate3d(-60px, 100px, 0)  scale(0.92); opacity: 0.7; }
+  75%  { transform: translate3d(-120px, -30px, 0) scale(1.05); opacity: 1;   }
+  100% { transform: translate3d(0, 0, 0)         scale(1);    opacity: 0.6; }
+}
+
+@keyframes orb-drift-3 {
+  0%   { transform: translate3d(0, 0, 0)        scale(1);    opacity: 0.5; }
+  30%  { transform: translate3d(70px, -80px, 0)  scale(1.12); opacity: 0.8; }
+  60%  { transform: translate3d(-50px, -40px, 0) scale(0.9);  opacity: 0.6; }
+  100% { transform: translate3d(0, 0, 0)        scale(1);    opacity: 0.5; }
+}
+
+@keyframes orb-drift-4 {
+  0%   { transform: translate3d(-50%, -50%, 0)           scale(1);   opacity: 0.4; }
+  33%  { transform: translate3d(calc(-50% - 80px), calc(-50% + 60px), 0) scale(1.15); opacity: 0.7; }
+  66%  { transform: translate3d(calc(-50% + 60px), calc(-50% - 50px), 0) scale(0.9);  opacity: 0.5; }
+  100% { transform: translate3d(-50%, -50%, 0)           scale(1);   opacity: 0.4; }
+}
+
+/* ── Reduce motion for accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+  .neon-orb {
+    animation: none !important;
+  }
+}
